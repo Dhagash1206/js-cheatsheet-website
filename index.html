@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>JavaScript Mastery Terminal Cheat Sheet</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0e0c; --panel:#081210; --muted:#9fb3b0; --accent:#00ff9c; --code:#7df9ff; --yellow:#ffd166; --tertiary:#163c2b;
+    --mono:'Fira Code',Menlo,monospace; --ui:'Inter','Segoe UI',sans-serif;
+  }
+  body{margin:0;background:var(--bg);color:var(--muted);font-family:var(--ui);}
+  .container{max-width:1200px;margin:0 auto;padding:16px;}
+  .terminal{background:#040c0b;border-radius:10px;border:1px solid rgba(255,255,255,0.05);overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.6)}
+  .term-header{display:flex;align-items:center;justify-content:space-between;background:#071412;padding:8px 12px}
+  .term-controls span{width:12px;height:12px;border-radius:50%;display:inline-block;margin-right:6px}
+  .term-controls .red{background:#ff5f56}.term-controls .yellow{background:#ffbd2e}.term-controls .green{background:#27c93f}
+  .term-title{font-family:var(--mono);font-size:13px;color:var(--muted)}
+  .term-body{padding:20px;font-family:var(--mono);color:var(--code);font-size:13px;min-height:400px;}
+  .navbar{position:sticky;top:0;background:#0c1513;padding:8px;display:flex;gap:8px;flex-wrap:wrap;z-index:10}
+  .nav-item{padding:6px 10px;border-radius:6px;background:rgba(255,255,255,0.05);cursor:pointer;font-family:var(--mono)}
+  .nav-item:hover{background:rgba(255,255,255,0.1)}
+  .page{margin-top:20px;padding:20px;border-radius:8px;background:#041312;border:1px solid rgba(255,255,255,0.05)}
+  h2{color:var(--yellow);font-family:var(--mono);margin-top:0}
+  pre{white-space:pre-wrap;color:var(--code);font-family:var(--mono);font-size:13px}
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="terminal">
+      <div class="term-header">
+        <div class="term-controls"><span class="red"></span><span class="yellow"></span><span class="green"></span></div>
+        <div class="term-title">user@javascript:~/learnJS</div>
+      </div>
+      <div class="term-body" id="terminal"></div>
+    </div>
+    <div class="navbar" id="navbar"></div>
+    <div id="pages"></div>
+  </div>
+<script>
+const topics=[
+ {title:'Variables & Data Types',body:`let, const, and var define variables. Use const by default.
+Types: string, number, boolean, object, null, undefined, symbol, bigint.
+Example:
+const name='Alice'; let age=30;`},
+ {title:'Functions',body:`Function Declaration vs Expression.
+Arrow functions preserve lexical this.
+Example:
+function greet(name){return 'Hi '+name}
+const sum=(a,b)=>a+b;`},
+ {title:'Arrays & Iteration',body:`Create arrays with [] or new Array(). Use map, filter, reduce.
+Example:
+const nums=[1,2,3]; const doubled=nums.map(x=>x*2);`},
+ {title:'Objects & Destructuring',body:`Objects are key-value pairs. Destructure for clarity.
+const user={name:'Bob',age:25}; const {name,age}=user;`},
+ {title:'Classes & Inheritance',body:`Use class syntax.
+class Person{constructor(name){this.name=name}}
+class Student extends Person{constructor(name,grade){super(name);this.grade=grade}}`},
+ {title:'Promises & Async/Await',body:`Promises handle async operations.
+async function load(){try{const res=await fetch('/api');return await res.json()}catch(e){console.error(e)}}`},
+ {title:'Modules',body:`Use export/import for modularity.
+export function add(a,b){return a+b}
+import {add} from './math.js'`},
+ {title:'Error Handling',body:`Use try/catch/finally.
+try{ riskyOp() }catch(err){ console.error(err) }finally{ cleanup() }`},
+ {title:'DOM Manipulation',body:`Select and modify DOM elements.
+const el=document.querySelector('#id'); el.textContent='Updated!';`},
+ {title:'Events & Delegation',body:`Use addEventListener.
+document.addEventListener('click',e=>console.log(e.target))`},
+ {title:'Storage APIs',body:`localStorage.setItem('key','value');
+const v=localStorage.getItem('key');`},
+ {title:'Fetch & HTTP',body:`fetch('/api').then(r=>r.json()).then(data=>console.log(data))`},
+ {title:'Node.js Basics',body:`const fs=require('fs'); fs.readFile('file.txt','utf8',(err,data)=>{if(err)throw err;console.log(data)})`},
+ {title:'React Essentials',body:`import {useState,useEffect} from 'react';
+function Counter(){const [count,setCount]=useState(0);useEffect(()=>{document.title=count},[count]);return <button onClick={()=>setCount(count+1)}>{count}</button>}`},
+ {title:'Advanced Topics',body:`Closures, currying, memoization, performance tuning, event loop deep dive.`}
+];
+const terminal=document.getElementById('terminal');
+const navbar=document.getElementById('navbar');
+const pages=document.getElementById('pages');
+function typeLine(text,delay=20){return new Promise(res=>{let i=0;const p=document.createElement('div');terminal.appendChild(p);const t=setInterval(()=>{p.textContent=text.slice(0,++i);if(i>=text.length){clearInterval(t);res();}},delay);});}
+(async()=>{await typeLine('user@javascript:~$ node learn.js');await typeLine('> Initializing cheat sheet...');await typeLine('> Loading 15+ major topics...');await typeLine('> Ready. Scroll or click a topic below.');})();
+topics.forEach((t,i)=>{const b=document.createElement('div');b.className='nav-item';b.textContent=t.title;b.onclick=()=>document.getElementById('section'+i).scrollIntoView({behavior:'smooth'});navbar.appendChild(b);const p=document.createElement('div');p.className='page';p.id='section'+i;p.innerHTML=`<h2>${t.title}</h2><pre>${t.body}</pre>`;pages.appendChild(p);});
+</script>
+</body>
+</html>
